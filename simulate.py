@@ -35,8 +35,10 @@ class Histogram:
 			canvas.create_text(width / 2 + bandWidth * i, 375, text=str(self.scale * i))
 		root.mainloop()
 
-condition1 = [1, 2, 3, 5, 6, 7]
-condition2 = [1, 5, 7, 5, 4]
+condition1 = [80, 40, 70, 50, 60, 80, 40, 70, 50, 60,80, 40, 70, 50, 60,80, 40, 70, 50, 60,80, 40, 70, 50, 60]
+condition2 = [10, 54, 72, 54, 41]
+
+#TODO: replace these with two different combinations for each list?
 
 print "Generating all permutations of data.."
 permutations = itertools.permutations(condition1 + condition2)
@@ -53,7 +55,7 @@ for permutation in permutations:
 print "Differences calculated"
 
 print "Generating histogram.."	
-histogram = Histogram(data)
+histogram = Histogram(data, scale=4)
 print "Histogram with the following distribution generated"
 
 print histogram.positive
