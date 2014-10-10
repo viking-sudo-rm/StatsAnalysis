@@ -35,10 +35,10 @@ class Histogram:
 			canvas.create_text(width / 2 + bandWidth * i, 375, text=str(self.scale * i))
 		root.mainloop()
 
-condition1 = [80, 40, 70, 50, 60, 80, 40, 70, 50, 60,80, 40, 70, 50, 60,80, 40, 70, 50, 60,80, 40, 70, 50, 60]
+condition1 = [80, 80, 40]
 condition2 = [10, 54, 72, 54, 41]
 
-#TODO: replace these with two different combinations for each list?
+#TODO: replace these with two different combinations for each list? or random iterator//have two iterators
 
 print "Generating all permutations of data.."
 permutations = itertools.permutations(condition1 + condition2)
