@@ -1,7 +1,7 @@
 from __future__ import division
 from Tkinter import *
 from math import factorial
-import itertools
+import itertools, random
 
 class Histogram:
 
@@ -35,19 +35,24 @@ class Histogram:
 			canvas.create_text(width / 2 + bandWidth * i, 375, text=str(self.scale * i))
 		root.mainloop()
 
-condition1 = [80, 80, 40]
-condition2 = [10, 54, 72, 54, 41]
+condition1 = [80, 80, 40, 4, 2, 4, 5, 1, 24, 123, 123, 35, 5, 1, 34, 1, 543, 1, 35, 2, 53, 35, 35, 356, 563]
+condition2 = [10, 54, 72, 54, 41, 356, 345, 234, 64, 75, 34, 23, 324, 45, 24, 456, 24, 243, 346, 32, 234, 46, 234, 426, 234, 2346, 324]
 
 #TODO: replace these with two different combinations for each list? or random iterator//have two iterators
 
+def randomize(list, num):
+	for i in range(num):
+		random.shuffle(list)
+		yield list
+
 print "Generating all permutations of data.."
-permutations = itertools.permutations(condition1 + condition2)
+permutations = randomize(condition1 + condition2, 1000000) #itertools.permutations(condition1 + condition2)
 print "Permutation iterator generated"
 
 print "Iterating through permutations and calculating differences in means..."
 data = []
 i = 0
-length = factorial(len(condition1) + len(condition2))
+length = 1000000 #factorial(len(condition1) + len(condition2))
 for permutation in permutations:
 	data += [sum(permutation[:len(condition1)]) / len(condition1) - sum(permutation[len(condition1):]) / len(condition2)]
 	if i % (length / 20) == 0: print "\t" + str(i / length * 100) + "%.."
@@ -55,7 +60,7 @@ for permutation in permutations:
 print "Differences calculated"
 
 print "Generating histogram.."	
-histogram = Histogram(data, scale=4)
+histogram = Histogram(data, scale=10)
 print "Histogram with the following distribution generated"
 
 print histogram.positive
