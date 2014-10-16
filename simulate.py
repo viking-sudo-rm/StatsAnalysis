@@ -26,13 +26,15 @@ class Histogram:
 		bandWidth = width / (len(self.positive + self.negative) + 2)
 		barWidth = bandWidth / 2
 		heightRatio = 300 / max(self.positive + self.negative)
-		
+				
 		for i in range(1, len(self.negative)):
 			canvas.create_rectangle(width / 2 - bandWidth * i, 350, width / 2 - bandWidth * i + barWidth, 350 - heightRatio * self.negative[i])
-			canvas.create_text(width / 2 - bandWidth * i, 375, text=str(self.scale * -i))
+			if i % 6 == 0:
+				canvas.create_text(width / 2 - bandWidth * i, 375, text=str(self.scale * -i))
 		for i in range(len(self.positive)):
 			canvas.create_rectangle(width / 2 + bandWidth * i, 350, width / 2 + bandWidth * i + barWidth, 350 - heightRatio * self.positive[i])
-			canvas.create_text(width / 2 + bandWidth * i, 375, text=str(self.scale * i))
+			if i % 6 == 0:
+				canvas.create_text(width / 2 + bandWidth * i, 375, text=str(self.scale * i))
 		root.mainloop()
 
 def readCSV(file):
@@ -40,12 +42,12 @@ def readCSV(file):
 		data = fh.read()
 	return [x.split(",") for  x in data.split("\n")]
 	
-def pvalue(value, data):
+def pvalue(value, data, lessThan=True):
 	num = 0
 	for datum in data:
 		if datum < value:
 			num += 1
-	return num / len(data)
+	return num / len(data) if lessThan else 1 - num / len(data)
 		
 condition1 = [80, 80, 40, 4, 2, 4, 5, 1, 24, 123, 123, 35, 5, 1, 34, 1, 543, 1, 35, 2, 53, 35, 35, 356, 563]
 condition2 = [10, 54, 72, 54, 41, 356, 345, 234, 64, 75, 34, 23, 324, 45, 24, 456, 24, 243, 346, 32, 234, 46, 234, 426, 234, 2346, 324]
@@ -71,10 +73,10 @@ for permutation in permutations:
 	i += 1
 print "Differences calculated"
 
-print "p-value for a difference of 1:", pvalue(1, data)
+print "p-value for a difference of 1:", pvalue(40, data)
 
 print "Generating histogram.."	
-histogram = Histogram(data, scale=10)
+histogram = Histogram(data, scale=1)
 print "Histogram with the following distribution generated"
 
 print histogram.positive
