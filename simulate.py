@@ -1,7 +1,6 @@
 from __future__ import division, with_statement
 from Tkinter import *
-from math import factorial
-import itertools, random
+import itertools, random, math
 
 class Histogram:
 
@@ -40,7 +39,7 @@ class Histogram:
 def readCSV(file):
 	with open(file, "r") as fh:
 		data = fh.read()
-	return [x.split(",") for  x in data.split("\n")]
+	return [float(x.split(",")[1]) for x in data.split("\n")[1:-1]]
 	
 def pvalue(value, data, lessThan=True):
 	num = 0
@@ -48,9 +47,16 @@ def pvalue(value, data, lessThan=True):
 		if datum < value:
 			num += 1
 	return num / len(data) if lessThan else 1 - num / len(data)
+	
+average = lambda x: sum(x) * 1.0 / len(x)
+variance = lambda x: map(lambda y: (y - average(x)) ** 2, x)
+stdev = lambda x: math.sqrt(average(variance(x)))
 		
-condition1 = [80, 80, 40, 4, 2, 4, 5, 1, 24, 123, 123, 35, 5, 1, 34, 1, 543, 1, 35, 2, 53, 35, 35, 356, 563]
-condition2 = [10, 54, 72, 54, 41, 356, 345, 234, 64, 75, 34, 23, 324, 45, 24, 456, 24, 243, 346, 32, 234, 46, 234, 426, 234, 2346, 324]
+condition1 = readCSV("related.csv")
+condition2 = readCSV("fullControl.csv")
+
+print "condition1 loaded with mean:", average(condition1), ", SD:", stdev(condition1), "and size:", len(condition1)
+print "condition2 loaded with mean:", average(condition2), ", SD:", stdev(condition2), "and size:", len(condition2)
 
 #TODO: replace these with two different combinations for each list? or random iterator//have two iterators
 
@@ -58,7 +64,7 @@ def randomize(list, num):
 	for i in range(num):
 		random.shuffle(list)
 		yield list
-
+		
 print "Generating all permutations of data.."
 permutations = randomize(condition1 + condition2, 100000) #itertools.permutations(condition1 + condition2)
 print "Permutation iterator generated"
@@ -73,7 +79,8 @@ for permutation in permutations:
 	i += 1
 print "Differences calculated"
 
-print "p-value for a difference of 1:", pvalue(40, data)
+difference = average(condition1) - average(condition2)
+print "Generated p-value set for data:", (pvalue(12.6, data), pvalue(12.6, data, False))
 
 print "Generating histogram.."	
 histogram = Histogram(data, scale=1)
