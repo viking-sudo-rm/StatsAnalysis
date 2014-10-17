@@ -80,7 +80,7 @@ for permutation in permutations:
 print "Differences calculated"
 
 difference = average(condition1) - average(condition2)
-print "Generated p-value set for data:", (pvalue(12.6, data), pvalue(12.6, data, False))
+print "Generated p-value set for data:", (pvalue(difference, data), pvalue(difference, data, False))
 
 print "Generating histogram.."	
 histogram = Histogram(data, scale=1)
